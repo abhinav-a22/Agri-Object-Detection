@@ -1,0 +1,26 @@
+# Core Deep Learning and Object Detection Framework
+ultralytics>=8.3.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Computer Vision and Image Processing
+opencv-python>=4.8.0
+Pillow>=9.5.0
+
+# Numerical Computing and Data Analysis
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization and Plotting
+matplotlib>=3.7.0
+
+# Configuration Management
+PyYAML>=6.0
+
+# Unit Testing and Quality Assurance
+pytest>=7.0.0
+
+# Interactive Exploration Notebooks
+jupyter>=1.0.0
+ipykernel>=6.0.0
+

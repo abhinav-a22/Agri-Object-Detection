@@ -1,0 +1,10 @@
+# YOLO Dataset Specification: John Deere Agricultural Object Detection
+# Dataset: DCB-yolo-tractor-detection (Roboflow Universe)
+
+path: C:/Users/ASUS/.gemini/antigravity/scratch/john-deere-agri-object-detection/data
+train: images/train
+val: images/val
+test: images/test
+
+nc: 2
+names: ['Tractor', 'person']

@@ -1,0 +1,56 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest and testing artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ultralytics YOLO run outputs and logs
+runs/
+*.log
+
+# Large weight files (do not commit heavy binaries to Git)
+models/*.pt
+models/*.onnx
+models/*.engine
+!models/.gitkeep
+
+# Large dataset raw images and labels (download via script instead)
+data/images/*
+data/labels/*
+!data/images/.gitkeep
+!data/labels/.gitkeep
+
+# Generated output predictions (keep directories, ignore generated binaries)
+outputs/detections/*
+outputs/metrics/*
+outputs/plots/*
+!outputs/detections/.gitkeep
+!outputs/metrics/.gitkeep
+!outputs/plots/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and Editor configurations
+.idea/
+.vscode/
+*.swp
+*.swo
+

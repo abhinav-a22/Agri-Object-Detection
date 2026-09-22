@@ -1,0 +1,119 @@
+# ==============================================================================
+# John Deere Agricultural Object Detection - System Configuration
+# ==============================================================================
+# This configuration file centralizes all parameters for data paths, model
+# architecture, training hyperparameters, data augmentations, and inference settings.
+# Keeping these parameters separated from code ensures reproducibility, clean
+# experimentation, and easy tuning without modifying source scripts.
+
+# ------------------------------------------------------------------------------
+# 1. Dataset Configuration
+# ------------------------------------------------------------------------------
+dataset:
+  # Path to the YOLO dataset definition YAML
+  data_yaml: "data/data.yaml"
+  
+  # Dataset metadata (Roboflow Universe - DCB-yolo-tractor-detection)
+  name: "DCB-yolo-tractor-detection"
+  source: "Roboflow Universe"
+  url: "https://universe.roboflow.com/rjdpworkspaace/dcb-yolo-tractor-detection"
+  license: "MIT"
+  
+  # Classes present in the dataset
+  num_classes: 2
+  classes:
+    - "tractor"
+    - "person"
+
+  # Image dimensions expected by the model
+  img_size: 640
+
+# ------------------------------------------------------------------------------
+# 2. Model Configuration
+# ------------------------------------------------------------------------------
+model:
+  # Primary model architecture: YOLO11s (Small variant - optimal balance of accuracy and speed)
+  # Alternative baseline: YOLO11n (Nano variant - for ultra-lightweight deployments)
+  architecture: "yolo11s"
+  pretrained_weights: "yolo11s.pt"
+  baseline_weights: "yolo11n.pt"
+  
+  # Directory where best and final trained weights will be saved
+  save_dir: "models"
+  best_model_name: "best.pt"
+  last_model_name: "last.pt"
+
+# ------------------------------------------------------------------------------
+# 3. Training Hyperparameters
+# ------------------------------------------------------------------------------
+training:
+  # Number of training epochs
+  epochs: 50
+  
+  # Batch size (set to 8 or 16 for student laptop GPUs; reduce to 4 if OOM occurs)
+  batch_size: 16
+  
+  # Number of dataloader workers (0 for Windows compatibility to avoid multiprocessing locks)
+  workers: 0
+  
+  # Hardware device: '0' for CUDA GPU, 'cpu' for CPU training, or 'auto' for automatic detection
+  device: "auto"
+  
+  # Optimizer configuration
+  optimizer: "SGD"           # Choices: SGD, Adam, AdamW
+  learning_rate: 0.01        # Initial learning rate (lr0)
+  lr_final: 0.01             # Final learning rate factor (lrf: final lr = lr0 * lrf)
+  momentum: 0.937            # SGD momentum or Adam beta1
+  weight_decay: 0.0005       # Optimizer weight decay
+  warmup_epochs: 3.0         # Warmup epochs for learning rate stabilization
+  
+  # Early stopping patience (epochs to wait for improvement before halting)
+  patience: 15
+  
+  # Seed for deterministic reproducibility
+  seed: 42
+
+# ------------------------------------------------------------------------------
+# 4. Agricultural Data Augmentation Parameters
+# ------------------------------------------------------------------------------
+# Augmentations are tuned for realistic agricultural outdoor conditions:
+# - HSV changes simulate varying daylight, harsh sun, overcast skies, and field dust.
+# - Degrees, translation, and scale simulate variable viewing angles from tractor mounts.
+# - Horizontal flips mirror field directions without altering object physics.
+# - Mosaic combines 4 images to expose the model to multiple object scales simultaneously.
+augmentation:
+  hsv_h: 0.015               # Image HSV-Hue augmentation (fraction: 0.0 - 1.0)
+  hsv_s: 0.7                 # Image HSV-Saturation augmentation (fraction: 0.0 - 1.0)
+  hsv_v: 0.4                 # Image HSV-Value/Brightness augmentation (fraction: 0.0 - 1.0)
+  degrees: 10.0              # Image rotation (+/- deg)
+  translate: 0.1             # Image translation (+/- fraction)
+  scale: 0.5                 # Image scale (+/- gain)
+  shear: 0.0                 # Image shear (+/- deg)
+  perspective: 0.0           # Image perspective (+/- fraction)
+  fliplr: 0.5                # Image flip left-right probability
+  flipud: 0.0                # Image flip up-down probability (farming objects rarely appear inverted)
+  mosaic: 1.0                # Mosaic augmentation probability (4-image mix)
+  mixup: 0.0                 # Mixup augmentation probability
+
+# ------------------------------------------------------------------------------
+# 5. Evaluation & Inference Configuration
+# ------------------------------------------------------------------------------
+inference:
+  # Minimum confidence threshold for filtering positive detections
+  confidence_threshold: 0.25
+  
+  # Non-Maximum Suppression (NMS) Intersection-over-Union (IoU) threshold
+  iou_threshold: 0.45
+  
+  # Output directories
+  output_detections_dir: "outputs/detections"
+  output_metrics_dir: "outputs/metrics"
+  output_plots_dir: "outputs/plots"
+  
+  # Real-time webcam settings
+  webcam:
+    camera_id: 0             # Default system camera index
+    frame_width: 1280
+    frame_height: 720
+    fps_display: true
+
